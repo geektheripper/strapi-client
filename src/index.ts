@@ -39,8 +39,9 @@ export class Api {
     const tokenExpired = () =>
       new Date().getTime() - tokenExpirationTime > 60 * 1000;
 
-    const applyToken = (token: string) => {
-      const payload = jwt.decode(token) as jwt.JwtPayload;
+    const applyToken = (_token: string) => {
+      const payload = jwt.decode(_token) as jwt.JwtPayload;
+      token = _token;
       tokenExpirationTime = (payload?.exp as number) * 1000;
     };
 
