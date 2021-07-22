@@ -16,8 +16,21 @@ export interface ApiOptions {
 export class Api {
   instance: AxiosInstance;
 
-  constructor({ baseURL, identifier, password, storeProvider }: ApiOptions) {
-    this.instance = axios.create({ baseURL });
+  constructor(_options: ApiOptions | (() => Promise<ApiOptions>)) {
+    this.instance = axios.create();
+
+    let options: ApiOptions;
+    const loadOptions = async () => {
+      if (!options) {
+        if (typeof _options === "function") {
+          options = await _options();
+        } else {
+          options = _options;
+        }
+      }
+
+      return options;
+    };
 
     let tokenNotLoaded = true;
     let token = "";
@@ -32,6 +45,11 @@ export class Api {
     };
 
     this.instance.interceptors.request.use(async (config) => {
+      const { baseURL, identifier, password, storeProvider } =
+        await loadOptions();
+
+      config.baseURL = baseURL;
+
       if (tokenNotLoaded && storeProvider)
         applyToken(await storeProvider.load());
 
