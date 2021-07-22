@@ -54,9 +54,14 @@ export class Api {
         applyToken(await storeProvider.load());
 
       if (tokenExpired()) {
-        const { data } = await this.instance.post("/auth/local", {
-          identifier,
-          password,
+        const { data } = await axios.request({
+          baseURL,
+          method: "POST",
+          url: "/auth/local",
+          data: {
+            identifier,
+            password,
+          },
         });
         applyToken(data.jwt);
         storeProvider?.save(data.jwt);
