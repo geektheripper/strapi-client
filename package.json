@@ -1,6 +1,6 @@
 {
   "name": "@geektr/strapi-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "strapi client based axios",
   "main": "dist/index.js",
   "repository": "git@github.com:geektheripper/strapi-client.git",
